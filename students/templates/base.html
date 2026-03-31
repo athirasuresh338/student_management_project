@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Student App{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial;
+            background-color: #f8fafc;
+            color: #1f2937;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0f766e;
+        }
+
+        .main-wrapper {
+            width: 95%;
+            margin: 0 auto;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            background: #0f766e;
+            color: white;
+        }
+
+        .navbar h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .navbar a {
+            color: white;
+            margin-left: 15px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        /* LAYOUT */
+        .container {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .center-page {
+            justify-content: center;
+            height: 85vh;
+        }
+
+        h3 {
+            margin: 20px 0;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            width: 500px;
+            margin: 5% auto;
+        }
+
+        /* FORM */
+        .container form {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 350px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 5px;
+        }
+
+        input:focus, select:focus {
+            border-color: #0f766e;
+            outline: none;
+        }
+
+        .container button {
+            width: 100%;
+            padding: 10px;
+            background: #0f766e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .container button:hover {
+            background: #115e59;
+        }
+
+        .error {
+            color: #dc2626;
+            font-size: 13px;
+        }
+
+        /* FILTER */
+        .filter-text {
+            margin: 20px 0 10px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .filter-container {
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 0;
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: stretch;
+            height: 40px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+
+        .filter-group input,
+        .filter-group select,
+        .sort-group select {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 0 10px;
+            height: 100%;
+            color: #6b7280;
+            background: white;
+        }
+
+        .filter-group input:not(:last-child),
+        .filter-group select:not(:last-child) {
+            border-right: 1px solid #e5e7eb;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus,
+        .sort-group select:focus {
+            color: #1f2937;
+        }
+
+        .filter-group select,
+        .sort-group select {
+            appearance: none;
+        }
+
+        /* SORT */
+        .sort-group {
+            display: flex;
+            align-items: stretch;
+            gap: 6px;
+            margin-left: 10px;
+        }
+
+        .sort-group select {
+            margin: 0;
+            height: 100%;
+            width: 120px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .sort-group button {
+            width: 36px;
+            border-radius: 6px;
+            border: none;
+            background: #0f766e;
+            color: white;
+            cursor: pointer;
+        }
+
+        .sort-group button:hover {
+            background: #115e59;
+        }
+
+        /* ACTION BAR */
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 16px 0;
+        }
+
+        .apply-btn,
+        .reset-btn {
+            height: 38px;
+            width: 72px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .apply-btn {
+            background: #0f766e;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-right: 6px;
+        }
+
+        .apply-btn:hover {
+            background: #115e59;
+        }
+
+        .reset-btn {
+            background: #6b7280;
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background: #4b5563;
+        }
+
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            text-align: left;
+            font-size: 13px;
+            color: #6b7280;
+            background: #f1f5f9;
+            padding: 14px;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn {
+            width: 40px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            color: white;
+        }
+
+        .view { background: #16a34a; }
+        .update { background: #f59e0b; }
+        .delete { background: #dc2626; }
+
+        .btn:hover {
+            opacity: 0.85;
+        }
+
+        /* PAGINATION */
+        .pagination {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 6px 10px;
+            background: #0f766e;
+            color: white;
+            border-radius: 4px;
+        }
+
+        .pagination a:hover {
+            background: #115e59;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <h2>Student Management System</h2>
+
+    <div class="nav-right">
+        {% if user.is_authenticated %}
+            <a href="{% url 'add_student' %}">+ Add Student</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </div>
+</div>
+
+{% if messages %}
+    <div class="message-container">
+        {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="main-wrapper">
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

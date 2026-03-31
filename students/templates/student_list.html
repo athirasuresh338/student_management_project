@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Student List{% endblock %}
+
+{% block content %}
+
+<p class="filter-text">
+    Filter by name, field of study, year or minimum cgpa
+</p>
+
+<form method="get" class="filter-container" id="filter-form">
+
+    <div class="filter-row">
+
+        <div class="filter-group">
+            <input type="number" name="number" placeholder="Student Number" value="{{ number }}">
+            <input type="text" name="name" placeholder="Name" value="{{ name }}">
+            <select name="field">
+                <option value="">Field of study</option>
+                <option value="ENG" {% if field == "ENG" %}selected{% endif %}>Engineering</option>
+                <option value="COM" {% if field == "COM" %}selected{% endif %}>Commerce</option>
+                <option value="ART" {% if field == "ART" %}selected{% endif %}>Arts</option>
+                <option value="BUS" {% if field == "BUS" %}selected{% endif %}>Business</option>
+                <option value="MED" {% if field == "MED" %}selected{% endif %}>Medical</option>
+                <option value="LAW" {% if field == "LAW" %}selected{% endif %}>Law</option>
+            </select>
+            <input type="number" name="year" placeholder="Year" value="{{ year }}">
+            <input type="number" step="0.01" name="min_cgpa" placeholder="Min cgpa" value="{{ min_cgpa }}">
+        </div>
+
+        <!-- SORT -->
+        <div class="sort-group">
+            <select name="sort_field">
+                <option value="">Sort by</option>
+                <option value="cgpa" {% if sort_field == 'cgpa' %}selected{% endif %}>CGPA</option>
+                <option value="student_number" {% if sort_field == 'student_number' %}selected{% endif %}>Student Number</option>
+                <option value="enrollment_date" {% if sort_field == 'enrollment_date' %}selected{% endif %}>Enrollment Date</option>
+            </select>
+
+            <button type="submit" name="direction" value="">⬆</button>
+            <button type="submit" name="direction" value="-">⬇</button>
+        </div>
+
+    </div>
+
+</form>
+
+
+<div class="action-row">
+    <h2>Student Records</h2>
+    <div class="right-actions">
+        <button type="submit" form="filter-form" class="apply-btn">Apply</button>
+        <a href="{% url 'student_list' %}" class="reset-btn">Reset</a>
+    </div>
+</div>
+
+
+<table>
+    <tr>
+        <th>STUDENT NUMBER</th>
+        <th>FIRST NAME</th>
+        <th>LAST NAME</th>
+        <th>EMAIL</th>
+        <th>FIELD OF STUDY</th>
+        <th>ENROLLMENT DATE</th>
+        <th>CGPA</th>
+        <th>ACTIONS</th>
+    </tr>
+
+    {% for student in page_obj %}
+    <tr>
+        <td>{{ student.student_number }}</td>
+        <td>{{ student.first_name }}</td>
+        <td>{{ student.last_name }}</td>
+        <td>{{ student.email }}</td>
+        <td>{{ student.get_field_of_study_display }}</td>
+        <td>{{ student.enrollment_date | date:"d M Y" }}</td>
+        <td>{{ student.cgpa }}</td>
+        <td>
+            <div class="action-buttons">
+                <a href="{% url 'view_student' student.id %}" class="btn view">
+                    <i class="fa-solid fa-circle-info"></i>
+                </a>
+
+                <a href="{% url 'update_student' student.id %}" class="btn update">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+
+                <a href="{% url 'delete_student' student.id %}" class="btn delete"
+                   onclick="return confirm('Are you sure?')">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+            </div>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="8" style="text-align:center;">No students found</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</div>
+
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&number={{ number }}&name={{ name }}&field={{ field }}&min_cgpa={{ min_cgpa }}&year={{ year }}&sort_field={{ sort_field }}&direction={{ direction }}">
+        Previous</a>
+    {% endif %}
+
+    <span>
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&number={{ number }}&name={{ name }}&field={{ field }}&min_cgpa={{ min_cgpa }}&year={{ year }}&sort_field={{ sort_field }}&direction={{ direction }}">
+        Next</a>
+    {% endif %}
+</div>
+
+{% endblock %}
