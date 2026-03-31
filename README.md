@@ -80,8 +80,5 @@ The project is divided into two main apps:
 This project was built primarily for learning and understanding core backend concepts.
 
 
-## Contact
-
-* LinkedIn: [your link]
-* Email: [your email]
-
+## Author
+Athira Suresh
